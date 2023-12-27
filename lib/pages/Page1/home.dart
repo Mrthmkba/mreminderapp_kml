@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
             child: const Icon(
               Icons.add_outlined,
               color: kTexColor,
-              size: 40,
+              size: 30,
             ),
           ),
         ),
