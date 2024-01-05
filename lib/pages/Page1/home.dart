@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget {
         },
 
           child: Card(
-            color: kScaffoldColor,
+            color: kPurple,
             shape: CircleBorder(),
             child: const Icon(
               Icons.add_outlined,

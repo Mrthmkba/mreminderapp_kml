@@ -10,3 +10,4 @@ const Color kOtherColor = Color(0xFFD9DDE2);
 const Color kErrorColor = Color(0xFFFF5252);
 const Color kTextLightColor = Color(0xFFC5BDCD);
 const Color kTexColor = Color(0xFF212121);
+const Color kPurple = Color(0xFF7986CB);

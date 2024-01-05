@@ -324,7 +324,7 @@ class MedicineTypeColumn extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(3),
-                color: isSelected ? kOtherColor : kScaffoldColor),
+                color: isSelected ? kOtherColor : kSecondColor),
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -345,7 +345,7 @@ class MedicineTypeColumn extends StatelessWidget {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: isSelected ? kOtherColor : Colors.transparent,
+                color: isSelected ? kOtherColor : Colors.blue,
                 borderRadius: BorderRadius.circular(40),
               ),
               child: Center(
@@ -354,7 +354,7 @@ class MedicineTypeColumn extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .titleSmall!
-                    .copyWith(color: isSelected ? Colors.white : kTexColor),
+                    .copyWith(color: isSelected ? Colors.purple : kTexColor),
               )),
             ),
           ),
