@@ -53,7 +53,7 @@ class _MedicineDetailsState extends State<MedicineDetails> {
             ),
           ),
           SizedBox(
-            height: 2,
+            height: 8,
           )
         ],
       ),
@@ -111,19 +111,22 @@ class MainSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SvgPicture.asset(
-          'assets/icons/pill.svg',
+          'assets/icons/pill.png',
           height: 20,
-          color: kSecondColor,
         ),
         const Column(
           // mainAxisAlignment: MainAxisAlignment.center,
+
           children: [
+            SizedBox(height: 10,),
             MainInfoTab(
               fieldTitle: 'Medicine Name',
               fieldInfo: 'Pill',
             ),
+            SizedBox(height: 8,),
             MainInfoTab(
               fieldTitle: 'Dosage',
               fieldInfo: '500 mg',
@@ -145,7 +148,7 @@ class MainInfoTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           fieldTitle,
@@ -172,10 +175,11 @@ class ExtendedInfoTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          SizedBox(height: 25),
           Text(
             fieldTitle,
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -185,7 +189,7 @@ class ExtendedInfoTab extends StatelessWidget {
           Text(
             fieldInfo,
             style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: kTexColor,
+                  color: kOrange,
                 ),
           ),
         ],

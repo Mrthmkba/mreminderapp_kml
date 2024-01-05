@@ -133,7 +133,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                         MedicineTypeColumn(
                             medicineType: MedicineType.pill,
                             name: "Pill",
-                            iconValue: 'assets/icons/pill.png',
+                            iconValue: 'assets/icons/pill.svg',
                             isSelected: snapshot.data == MedicineType.pill
                                 ? true
                                 : false),
@@ -143,7 +143,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                         MedicineTypeColumn(
                             medicineType: MedicineType.insulin,
                             name: "Insulin",
-                            iconValue: 'assets/icons/insulin.png',
+                            iconValue: 'assets/icons/insulin.svg',
                             isSelected: snapshot.data == MedicineType.insulin
                                 ? true
                                 : false),
@@ -345,8 +345,8 @@ class MedicineTypeColumn extends StatelessWidget {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: isSelected ? kOtherColor : Colors.blue,
-                borderRadius: BorderRadius.circular(40),
+                color: isSelected ? kOtherColor : Colors.transparent,
+                borderRadius: BorderRadius.circular(30),
               ),
               child: Center(
                   child: Text(
