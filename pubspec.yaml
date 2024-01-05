@@ -39,7 +39,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^6.1.0
   flutter_image_uploading:
-  flutter_svg:  ^0.22.0
+  flutter_svg:
+  rxdart:
+  provider:
+  shared_preferences: ^2.2.2
+
 
 
 
@@ -66,9 +70,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
-  assets:
-    - assets/icons/pill (3).svg
+  # To add assets to your application, add an assets section, like this
+assets:
+  - assets/icons/pill.png
+  - assets/icons/insulin.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

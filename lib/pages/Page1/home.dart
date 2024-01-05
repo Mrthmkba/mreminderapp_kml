@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mreminderapp/pages/Page1/constants.dart';
+import 'package:mreminderapp/pages/medicine_details/medicine_details.dart';
 import '../new_entry_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,14 +13,14 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Daily Reminder...',
+        title: Text('Reminder',
           style: GoogleFonts.roboto(
             fontSize: 23,
             fontWeight: FontWeight.bold,
-            color: Colors.black54,
+            color: Colors.black,
           ),
         ),
-
+        centerTitle: true,
       ),
       body: const Padding(
 
@@ -44,20 +46,16 @@ class HomePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) =>  const NewEntryPage(title: 'Add New', isRequired: true),),
-
           );
         },
 
           child: Card(
-
-            color: kPrimaryColor,
-            shape: BeveledRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+            color: kScaffoldColor,
+            shape: CircleBorder(),
             child: const Icon(
               Icons.add_outlined,
-              color: kTexColor,
-              size: 30,
+              color: Colors.white,
+              size: 50,
             ),
           ),
         ),
@@ -78,23 +76,39 @@ class TopContainer extends StatelessWidget {
           alignment: Alignment.center,
           padding: const EdgeInsets.only(bottom: 5),
           child: Text(
-            'Your Health , Your Wealth.',
+            'Your Health  Your Wealth.',
             style:GoogleFonts.roboto(
               fontStyle: FontStyle.italic,
-              color: Colors.brown,
+              color: Colors.cyan,
               fontSize: 28,
+              fontWeight: FontWeight.w800,
+
+            ),
+          ),
+
+        ),
+        Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.only(bottom: 5),
+          child:Text(
+            'Welcome to Daily Health Reminder.',
+
+            style:GoogleFonts.roboto(
+              fontStyle: FontStyle.italic,
+              color: Colors.grey,
+              fontSize: 18,
               fontWeight: FontWeight.w800,
 
             ),
           ),
         ),
 
-        const SizedBox(
-          height: 5,
+        SizedBox(
+          height: 10,
         ),
         Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.only(bottom: 2),
+          padding: const EdgeInsets.only(bottom: 10,top: 10),
           child: Text(
             '0',
             style: Theme.of(context).textTheme.headlineSmall,
@@ -109,16 +123,72 @@ class BottomContainer extends StatelessWidget {
   const BottomContainer({super.key});
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
+    //return Center(
+      //child: Text(
 
-        'No Medicine',
-        style: GoogleFonts.roboto(
-          fontSize: 26,
-          color: Colors.orange,
-            fontWeight: FontWeight.w700,
-        )
+        //'No Medicine',
+        //style: GoogleFonts.roboto(
+          //fontSize: 26,
+          //color: Colors.orange,
+            //fontWeight: FontWeight.w700,
+        //)
 
+
+      //),
+    return GridView.builder(
+        padding: EdgeInsets.only(top: 1),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount:3,
+    ),
+      itemCount :6,
+      itemBuilder : (context,index){
+      return MedicineCard();
+      }
+    );
+  }
+}
+
+class MedicineCard extends StatelessWidget {
+  const MedicineCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      highlightColor: Colors.white,
+      splashColor: Colors.grey,
+      onTap:(){
+        //go to details
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> MedicineDetails()));
+      },
+      child: Container(
+        padding: EdgeInsets.only(left: 2,right: 2,top: 2,bottom: 2),
+        margin: EdgeInsets.all(1),
+        decoration: BoxDecoration(
+            color: kSecondColor,
+            borderRadius: BorderRadius.circular(4)
+        ),
+        child: Column(
+
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset('assets/icons/pill.svg',
+              height: 7,
+              color: kOtherColor,
+            ),
+            const Spacer(),
+            //Tag animation
+            Text('Pill',
+              overflow: TextOverflow.fade,
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.bodyLarge,),
+            SizedBox(height: 0.5,),
+            Text('Every 8 Hours',
+              overflow: TextOverflow.fade,
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.bodySmall,),
+          ],
+        ),
 
       ),
     );

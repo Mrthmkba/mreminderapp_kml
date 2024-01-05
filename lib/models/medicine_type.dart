@@ -1,6 +1,3 @@
 enum MedicineType{
-  bottle,
-  pill,
-  syringe,
-  tablet,
+  pill, insulin,none,
 }
