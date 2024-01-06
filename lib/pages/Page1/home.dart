@@ -49,10 +49,10 @@ class HomePage extends StatelessWidget {
           );
         },
 
-          child: Card(
+          child: const Card(
             color: kPurple,
             shape: CircleBorder(),
-            child: const Icon(
+            child: Icon(
               Icons.add_outlined,
               color: Colors.white,
               size: 50,
@@ -72,7 +72,7 @@ class TopContainer extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Container(
+        /* Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.only(bottom: 5),
           child: Text(
@@ -102,7 +102,7 @@ class TopContainer extends StatelessWidget {
             ),
           ),
         ),
-
+*/
         SizedBox(
           height: 10,
         ),
@@ -145,51 +145,55 @@ class BottomContainer extends StatelessWidget {
       return MedicineCard();
       }
     );
+
   }
 }
 
 class MedicineCard extends StatelessWidget {
-  const MedicineCard({super.key});
+  const MedicineCard({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       highlightColor: Colors.white,
       splashColor: Colors.grey,
-      onTap:(){
-        //go to details
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> MedicineDetails()));
+      onTap: () {
+        // Go to details
+        Navigator.push(context, MaterialPageRoute(builder: (context) => MedicineDetails()));
       },
       child: Container(
-        padding: EdgeInsets.only(left: 2,right: 2,top: 2,bottom: 2),
+        padding: EdgeInsets.all(2),
         margin: EdgeInsets.all(1),
         decoration: BoxDecoration(
-            color: kSecondColor,
-            borderRadius: BorderRadius.circular(4)
+          color: kSecondColor,
+          borderRadius: BorderRadius.circular(4),
         ),
         child: Column(
-
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset('assets/icons/pill.svg',
-              height: 7,
+            SvgPicture.asset(
+              'assets/icons/pill.svg',
+              height: 50, // Adjust the height as needed
               color: kOtherColor,
             ),
             const Spacer(),
-            //Tag animation
-            Text('Pill',
+            // Tag animation
+            Text(
+              'Pill',
               overflow: TextOverflow.fade,
               textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.bodyLarge,),
-            SizedBox(height: 0.5,),
-            Text('Every 8 Hours',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            SizedBox(height: 0.5),
+            Text(
+              'Every 8 Hours',
               overflow: TextOverflow.fade,
               textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.bodySmall,),
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
           ],
         ),
-
       ),
     );
   }

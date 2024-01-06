@@ -110,15 +110,13 @@ class MainSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SvgPicture.asset(
-          'assets/icons/pill.png',
-          height: 20,
+        Image.asset(
+          'assets/icons/pill.png',height: 5,width: 5,
         ),
         const Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
             SizedBox(height: 10,),

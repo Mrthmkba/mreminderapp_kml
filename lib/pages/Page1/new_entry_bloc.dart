@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import '../../models/errors.dart';
 
 class NewEntryBloc {
+  //
   BehaviorSubject<MedicineType>? _selectedMedicineType;
 
   ValueStream<MedicineType>? get selectedMedicineType => _selectedMedicineType!.stream;
@@ -18,18 +19,20 @@ class NewEntryBloc {
   BehaviorSubject<String>? get _selectTimeOfDay$ => selectedTimeOfDay;
 
 
-  //Error State
-  BehaviorSubject<EntryError>? _errorState;
 
-  BehaviorSubject<EntryError>? get errorState => _errorState;
+  //Error State
+  BehaviorSubject<EntryError>? _errorState$;
+
+  BehaviorSubject<EntryError>? get errorState$ => _errorState$;
 
 
   NewEntryBloc() {
+
     _selectedMedicineType =
     BehaviorSubject<MedicineType>.seeded(MedicineType.none);
     selectedTimeOfDay = BehaviorSubject<String>.seeded('none');
     _selectedIntervals = BehaviorSubject<int>.seeded(0);
-    _errorState = BehaviorSubject<EntryError>();
+    _errorState$ = BehaviorSubject<EntryError>();
   }
 
   void dispose() {
@@ -39,7 +42,7 @@ class NewEntryBloc {
   }
 
   void submiterror(EntryError error) {
-    _errorState!.add(error);
+    _errorState$!.add(error);
   }
 
   void updateInterval(int interval) {
@@ -49,6 +52,7 @@ class NewEntryBloc {
   void updateTime(String time) {
     selectedTimeOfDay!.add(time);
   }
+
 
   void updateSelectedMedicine(MedicineType type) {
     MedicineType _tempType = _selectedMedicineType!.value;

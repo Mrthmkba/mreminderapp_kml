@@ -9,3 +9,4 @@ enum EntryError {
 
 
 }
+//saving the data via shared preferences

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mreminderapp/pages/Page1/global_bloc.dart';
-import 'package:mreminderapp/pages/Page1/new_entry_bloc.dart';
 import 'package:provider/provider.dart';
+import 'global_bloc.dart';
 import 'pages/Page1/constants.dart';
 import 'pages/Page1/home.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,7 +22,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // TODO: implement initState
-    globalBloc= GlobalBloc();
+    globalBloc = GlobalBloc();
     super.initState();
   }
   // This widget is the root of your application.
@@ -76,9 +75,9 @@ class _MyAppState extends State<MyApp> {
             color: kOtherColor,
           ),
 
-          titleSmall: GoogleFonts.poppins(fontSize: 14, color: kTexColor,fontWeight: FontWeight.bold),
+          titleSmall: GoogleFonts.poppins(fontSize: 14, color: kTexColor,fontWeight: FontWeight.w400),
           titleMedium: GoogleFonts.poppins(fontSize: 16, color: kTexColor),
-          titleLarge: GoogleFonts.poppins(fontSize: 18, color: kTexColor),
+          titleLarge: GoogleFonts.poppins(fontSize: 18, color: kTexColor,fontWeight: FontWeight.w600),
         ),
         inputDecorationTheme: const InputDecorationTheme(
           enabledBorder: UnderlineInputBorder(
