@@ -110,7 +110,7 @@ class MainSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+
       children: [
         Image.asset(
           'assets/icons/pill.png',height: 5,width: 5,

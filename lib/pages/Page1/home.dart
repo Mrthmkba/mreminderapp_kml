@@ -172,9 +172,9 @@ class MedicineCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              'assets/icons/pill.svg',
-              height: 50, // Adjust the height as needed
+            Image.asset(
+              'assets/icons/pill.png',
+              height: 20, // Adjust the height as needed
               color: kOtherColor,
             ),
             const Spacer(),

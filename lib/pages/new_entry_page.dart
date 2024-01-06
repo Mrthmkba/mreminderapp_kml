@@ -132,7 +132,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                         MedicineTypeColumn(
                             medicineType: MedicineType.pill,
                             name: "Pill",
-                            iconValue: 'assets/icons/pill.svg',
+                            iconValue: 'assets/icons/pill.png',
                             isSelected: snapshot.data == MedicineType.pill
                                 ? true
                                 : false),
@@ -142,7 +142,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                         MedicineTypeColumn(
                             medicineType: MedicineType.insulin,
                             name: "Insulin",
-                            iconValue: 'assets/icons/insulin.svg',
+                            iconValue: 'assets/icons/insulin.png',
                             isSelected: snapshot.data == MedicineType.insulin
                                 ? true
                                 : false),
@@ -216,9 +216,11 @@ class _NewEntryPageState extends State<NewEntryPage> {
                             dosage = int.parse(dosageController.text);
                           }
 
-                          for (var medicine in globalBloc.medicineList$!.value) {
+                          for (var medicine in globalBloc.medicineList$!
+                              .value) {
                             if (medicineName == medicine.medicineName) {
-                              _newEntryBloc.submiterror(EntryError.nameDuplicate);
+                              _newEntryBloc.submiterror(
+                                  EntryError.nameDuplicate);
                               return;
                             }
                           }
@@ -226,7 +228,8 @@ class _NewEntryPageState extends State<NewEntryPage> {
                             _newEntryBloc.submiterror(EntryError.interval);
                             return;
                           }
-                          if (_newEntryBloc.selectedTimeOfDay!.value == "None") {
+                          if (_newEntryBloc.selectedTimeOfDay!.value ==
+                              "None") {
                             _newEntryBloc.submiterror(EntryError.startTime);
                             return;
                           }
@@ -243,7 +246,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                           List<int> intIDs = makeIDs(
                               24 / -_newEntryBloc.selectedIntervals!.value);
                           List<String> notificationIDs =
-                              intIDs.map((i) => i.toString()).toList();
+                          intIDs.map((i) => i.toString()).toList();
 
                           Medicine newEntryMedicine = Medicine(
                               notificationIDs: notificationIDs,
@@ -252,13 +255,11 @@ class _NewEntryPageState extends State<NewEntryPage> {
                               medicineType: medicineType,
                               interval: interval,
                               startTime: startTime);
-
                           globalBloc.UpdateMedicineList(newEntryMedicine);
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SuccessPage()));
-                        },
-                      ),
-                  ),
+                        }
+                        ),
                 ),
+              ),
               ),
             ],
           ),
