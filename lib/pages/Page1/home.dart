@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  const NewEntryPage(title: 'Add New', isRequired: true),
+                  const NewEntryPage(title: 'Add New ', isRequired: true),
             ),
           );
         },
@@ -183,29 +183,28 @@ class BottomContainer extends StatelessWidget {
 class MedicineCard extends StatelessWidget {
   const MedicineCard({Key? key, required this.medicine}) : super(key: key);
   final Medicine medicine;
-  //get current details of saved item
+
   Hero makeIcon(double size) {
-    String tag = '${medicine.medicineName!}_${medicine.medicineType!}';
-    if (medicine.medicineType == 'Pill') {
+    if (medicine.medicineType == 'pill') {
       return Hero(
-        tag: tag,
+        tag: medicine.medicineName! + medicine.medicineType!,
         child: SvgPicture.asset(
           'assets/icons/pill.svg',
-          height: 7,
+          height: 30,
         ),
       );
-    } else if (medicine.medicineType == 'Insulin') {
+    } else if (medicine.medicineType == 'insulin') {
       return Hero(
-        tag: tag,
+        tag: medicine.medicineName! + medicine.medicineType!,
         child: SvgPicture.asset(
           'assets/icons/insulin.svg',
-          height: 7,
+          height: 30,
         ),
       );
     }
     // for condition of no medicine type icon selected
     return Hero(
-      tag: tag,
+      tag: medicine.medicineName! + medicine.medicineType!,
       child: Icon(
         Icons.error,
         color: kTexColor,
@@ -213,36 +212,6 @@ class MedicineCard extends StatelessWidget {
       ),
     );
   }
-
-
-  // Hero makeIcon(double size) {
-  //   if (medicine.medicineType == 'Pill') {
-  //     return Hero(
-  //       tag: medicine.medicineName! + medicine.medicineType!,
-  //       child: SvgPicture.asset(
-  //         'assets/icons/pill.svg',
-  //         color: kTexColor,
-  //         height: 15,),
-  //     );
-  //   } else if (medicine.medicineType == 'Insulin') {
-  //     return Hero(
-  //       tag: medicine.medicineName! + medicine.medicineType!,
-  //       child: SvgPicture.asset(
-  //         'assets/icons/insulin.svg',
-  //         color: kTexColor,
-  //         height: 15,),
-  //     );
-  //   }
-  //   // for condition of no medicine type icon selected
-  //   return Hero(
-  //     tag: medicine.medicineName! + medicine.medicineType!,
-  //     child: Icon(
-  //       Icons.error,
-  //       color: kTexColor,
-  //       size: size,
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -270,7 +239,7 @@ class MedicineCard extends StatelessWidget {
         );
       },
       child: Container(
-        padding: EdgeInsets.only(left: 2,right: 2,top: 1,bottom: 1),
+        padding: EdgeInsets.only(left: 2, right: 2, top: 1, bottom: 1),
         margin: EdgeInsets.all(1),
         decoration: BoxDecoration(
           color: kSecondColor,
@@ -280,32 +249,34 @@ class MedicineCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // calling make icon function
             const Spacer(),
-            makeIcon(7),
+            makeIcon(30),
             const Spacer(),
             // Tag animation
             Hero(
               tag: medicine.medicineName!,
               child: Text(
-                medicine.medicineName!,
+                medicine.medicineName ?? '',
                 overflow: TextOverflow.fade,
                 textAlign: TextAlign.start,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
             SizedBox(height: 0.3),
-        Text(
-                medicine.interval == 1
-                    ? 'Every ${medicine.interval} hour'
-                    : 'Every ${medicine.interval} hours',
-                overflow: TextOverflow.fade,
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
+            Text(
+              medicine.interval != null
+                  ? (medicine.interval == 1
+                  ? 'Every ${medicine.interval} hour'
+                  : 'Every ${medicine.interval} hours')
+                  : 'Interval not specified',
+              overflow: TextOverflow.fade,
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
           ],
         ),
       ),
     );
   }
 }
+

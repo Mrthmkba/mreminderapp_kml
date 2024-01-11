@@ -16,7 +16,6 @@ class MedicineDetails extends StatefulWidget {
 }
 
 class _MedicineDetailsState extends State<MedicineDetails> {
-
   @override
   Widget build(BuildContext context) {
     final GlobalBloc _globalBloc = Provider.of<GlobalBloc>(context);
@@ -33,7 +32,7 @@ class _MedicineDetailsState extends State<MedicineDetails> {
         centerTitle: (true),
       ),
       body: Padding(
-        padding:  EdgeInsets.only(top: 5),
+        padding: EdgeInsets.only(top: 5),
         child: Column(
           children: [
             MainSection(medicine: widget.medicine),
@@ -67,7 +66,7 @@ class _MedicineDetailsState extends State<MedicineDetails> {
     );
   }
 
-  openAlertBox(BuildContext context,GlobalBloc _globalBloc) {
+  openAlertBox(BuildContext context, GlobalBloc _globalBloc) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -87,7 +86,7 @@ class _MedicineDetailsState extends State<MedicineDetails> {
                 Navigator.of(context).pop();
               },
               child: Text(
-                'Cencel',
+                'Cancel',
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ),
@@ -112,31 +111,31 @@ class _MedicineDetailsState extends State<MedicineDetails> {
   }
 }
 
-class MainSection extends StatelessWidget  {
+class MainSection extends StatelessWidget {
   const MainSection({super.key, this.medicine});
   final Medicine? medicine;
 
   Hero makeIcon(double size) {
-    if (medicine!.medicineType == 'pill') {
+    if (medicine != null && medicine!.medicineType == 'pill') {
       return Hero(
         tag: medicine!.medicineName! + medicine!.medicineType!,
         child: SvgPicture.asset(
           'assets/icons/pill.svg',
-          height: 7,
+          height: 30,
         ),
       );
-    } else if (medicine!.medicineType == 'insulin') {
+    } else if (medicine != null && medicine!.medicineType == 'insulin') {
       return Hero(
         tag: medicine!.medicineName! + medicine!.medicineType!,
         child: SvgPicture.asset(
           'assets/icons/insulin.svg',
-          height: 7,
+          height: 30,
         ),
       );
     }
     // for condition of no medicine type icon selected
     return Hero(
-      tag: medicine!.medicineName! + medicine!.medicineType!,
+      tag: medicine != null ? medicine!.medicineName! + medicine!.medicineType! : '',
       child: Icon(
         Icons.error,
         color: kTexColor,
@@ -149,18 +148,18 @@ class MainSection extends StatelessWidget  {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        makeIcon(7),
+        makeIcon(30),
         SizedBox(width: 10),
-         Column(
-           mainAxisAlignment: MainAxisAlignment.center,
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Hero(
-              tag: medicine!.medicineName!,
+              tag: medicine != null ? medicine!.medicineName! : '',
               child: Material(
                 color: Colors.transparent,
                 child: MainInfoTab(
                     fieldTitle: 'Medicine Name',
-                    fieldInfo: medicine!.medicineName!),
+                    fieldInfo: medicine != null ? medicine!.medicineName! : ''),
               ),
             ),
             SizedBox(
@@ -168,10 +167,9 @@ class MainSection extends StatelessWidget  {
             ),
             MainInfoTab(
                 fieldTitle: 'Dosage',
-                fieldInfo: medicine!.dosage == 0
-                    ? 'Not Specified'
-                    : '${medicine!.dosage} mg'
-            ),
+                fieldInfo: medicine != null && medicine!.dosage != null && medicine!.dosage! > 0
+                    ? '${medicine!.dosage} mg'
+                    : 'Not Specified'),
           ],
         ),
       ],
@@ -180,8 +178,7 @@ class MainSection extends StatelessWidget  {
 }
 
 class MainInfoTab extends StatelessWidget {
-  const MainInfoTab(
-      {super.key, required this.fieldTitle, required this.fieldInfo});
+  const MainInfoTab({super.key, required this.fieldTitle, required this.fieldInfo});
 
   final String fieldTitle;
   final String fieldInfo;
@@ -189,27 +186,26 @@ class MainInfoTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              fieldTitle,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const SizedBox(
-              height: 0.5,
-            ),
-            Text(
-              fieldInfo,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ],
-        );
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          fieldTitle,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        const SizedBox(
+          height: 0.5,
+        ),
+        Text(
+          fieldInfo,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ],
+    );
   }
 }
 
 class ExtendedInfoTab extends StatelessWidget {
-  const ExtendedInfoTab(
-      {super.key, required this.fieldTitle, required this.fieldInfo});
+  const ExtendedInfoTab({super.key, required this.fieldTitle, required this.fieldInfo});
   final String fieldTitle;
   final String fieldInfo;
 
@@ -220,18 +216,18 @@ class ExtendedInfoTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 25),
+          SizedBox(height: 20),
           Text(
             fieldTitle,
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  color: kTexColor,
-                ),
+              color: kTexColor,
+            ),
           ),
           Text(
             fieldInfo,
             style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: kOrange,
-                ),
+              color: kOrange,
+            ),
           ),
         ],
       ),
@@ -241,6 +237,7 @@ class ExtendedInfoTab extends StatelessWidget {
 
 class ExtendedSection extends StatelessWidget {
   const ExtendedSection({super.key, this.medicine});
+
   final Medicine? medicine;
 
   @override
@@ -250,17 +247,27 @@ class ExtendedSection extends StatelessWidget {
       children: [
         ExtendedInfoTab(
           fieldTitle: 'Medicine Type',
-          fieldInfo: medicine!.medicineType! == 'none'
-              ? 'Not Specified'
-              : medicine!.medicineType!,
+          fieldInfo: medicine != null && medicine!.medicineType != null &&
+              medicine!.medicineType! != 'none'
+              ? medicine!.medicineType!
+              : 'Not Specified',
         ),
         ExtendedInfoTab(
           fieldTitle: 'Dosage Interval',
-          fieldInfo: 'Every ${medicine!.interval} Hours | ${medicine!.interval == 24 ? 'One time a day' : '${(24 / medicine!.interval!).floor()} times a day'}'
+          fieldInfo: medicine != null && medicine!.interval != null
+              ? 'Every ${medicine!.interval} Hours | ${medicine!.interval == 24
+              ? 'One time a day'
+              : '${(24 / medicine!.interval!).floor()} times a day'}'
+              : 'Not Specified',
         ),
         ExtendedInfoTab(
           fieldTitle: 'Start Time',
-          fieldInfo: '${medicine!.startTime![0]}${medicine!.startTime![1]}:${medicine!.startTime![2]}${medicine!.startTime![3]}',
+          fieldInfo: medicine != null && medicine!.startTime != null &&
+              medicine!.startTime!.isNotEmpty
+              ? '${medicine!.startTime![0]}${medicine!
+              .startTime![1]}:${medicine!.startTime![2]}${medicine!
+              .startTime![3]}'
+              : 'Not Specified',
         ),
       ],
     );
