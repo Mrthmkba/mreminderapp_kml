@@ -12,7 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class HomePage extends StatelessWidget {
   const HomePage({Key? key, required String title}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,17 +132,6 @@ class BottomContainer extends StatelessWidget {
   const BottomContainer({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    //return Center(
-    //child: Text(
-
-    //'No Medicine',
-    //style: GoogleFonts.roboto(
-    //fontSize: 26,
-    //color: Colors.orange,
-    //fontWeight: FontWeight.w700,
-    //)
-
-    //),
     final GlobalBloc globalBloc = Provider.of<GlobalBloc>(context);
 
 
@@ -167,7 +155,7 @@ class BottomContainer extends StatelessWidget {
           return GridView.builder(
             padding: EdgeInsets.only(top: 1),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2),
+                crossAxisCount: 3),
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               return MedicineCard(

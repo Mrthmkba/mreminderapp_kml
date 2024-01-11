@@ -7,18 +7,21 @@ import 'package:mreminderapp/common/convert_time.dart';
 import 'package:mreminderapp/global_bloc.dart';
 import 'package:mreminderapp/models/errors.dart';
 import 'package:mreminderapp/models/medicine.dart';
+import 'package:mreminderapp/pages/Page1/home.dart';
 import 'package:provider/provider.dart';
 import 'package:mreminderapp/models/medicine_type.dart';
 import 'package:mreminderapp/pages/Page1/constants.dart';
 import 'package:mreminderapp/pages/Page1/new_entry_bloc.dart';
 //import 'package:flutter/time_picker.dart';
 import 'package:mreminderapp/pages/SuccessScreen/SuccessScreen.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NewEntryPage extends StatefulWidget {
   const NewEntryPage(
       {super.key, required this.title, required this.isRequired});
   final String title;
   final bool isRequired;
+
 
   @override
   State<NewEntryPage> createState() => _NewEntryPageState();
@@ -28,6 +31,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
   late TextEditingController nameController;
   late TextEditingController dosageController;
   late GlobalKey<ScaffoldState> _scaffoldKey;
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   late NewEntryBloc _newEntryBloc;
   late TimeOfDay selectedTime;
   int? dosage = 0;
@@ -47,8 +51,10 @@ class _NewEntryPageState extends State<NewEntryPage> {
     super.initState();
     nameController = TextEditingController();
     dosageController = TextEditingController();
+    flutterLocalNotificationsPlugin= FlutterLocalNotificationsPlugin();
     _scaffoldKey = GlobalKey<ScaffoldState>();
     _newEntryBloc = NewEntryBloc();
+    initializeNotifications();
     initializeErrorListen();
   }
 
@@ -232,6 +238,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
 
                         //updating medicineList using global bloc
                         globalBloc.updateMedicineList(newEntryMedicine);
+                        scheduledNotification(newEntryMedicine);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -304,7 +311,67 @@ class _NewEntryPageState extends State<NewEntryPage> {
     }
     return ids;
   }
+
+  initializeNotifications() async {
+    var initializationSettingsAndroid =
+        const AndroidInitializationSettings("@mipmap/launcher_icon");
+
+    var initializationSettingsIOS = const DarwinInitializationSettings();
+    var initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future onSelectNotification(String? payload) async {
+    if(payload != null){
+      debugPrint('notification payload: $payload');
+    }
+    await Navigator.push(context, MaterialPageRoute(
+        builder: (context)=> const HomePage(title: 'Reminder',)));
+  }
+
+  Future<void> scheduledNotification(Medicine medicine)async{
+    var hour = int.parse(medicine.startTime![0]+medicine.startTime![1]);
+    var ogValue = hour;
+    var minute = int.parse(medicine.startTime![2]+ medicine.startTime![3]);
+
+    var androidPlatformChannelSpecifics =
+    const AndroidNotificationDetails(
+      'repeatDailyAtTime channel id','repeatDailyAtTime channel name',
+      importance : Importance.max,
+      ledColor: kSecondColor,
+      ledOffMs: 1000,
+      ledOnMs: 1000,
+      enableLights: true);
+
+    var iOSPlatformChannelSpecifics = const DarwinNotificationDetails();
+
+    var platformChannelSpecifics = NotificationDetails(
+      android : androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics
+    );
+    for ( int i =0; i< (24/medicine.interval!).floor(); i++){
+      if(hour + (medicine.interval! * i) > 23){
+        hour = hour + (medicine.interval! * i) -24;
+      }else{
+        hour = hour + (medicine.interval! * i);
+      }
+      await flutterLocalNotificationsPlugin.show(
+        int.parse(medicine.notificationIDs![i]),
+        'Reminder: ${medicine.medicineName}',
+        medicine.medicineType.toString() != MedicineType.none.toString()
+           ?'It is time to take your ${medicine.medicineType!.toLowerCase()}, according to schedule'
+            :'It is time to take your medicine, according to schedule',
+          const TimeOfDay( hour: 0,minute: 0) as NotificationDetails?,
+          platformChannelSpecifics,
+          payload: 'Notification Payload'
+      );
+      hour = ogValue;
+    }
+  }
 }
+
+
 
 class SelectTime extends StatefulWidget {
   const SelectTime({Key? key}) : super(key: key);
@@ -362,45 +429,7 @@ class _SelectTimeState extends State<SelectTime> {
 }
 
 
-//   void _showSuccessDialog() {
-//   //   showDialog(
-//   //     context: context,
-//   //     builder: (BuildContext context) {
-//   //       return AlertDialog(
-//   //         title: Text(
-//   //           'Success!',
-//   //           style: GoogleFonts.poppins(
-//   //             fontSize: 24,
-//   //             fontWeight: FontWeight.bold,
-//   //             color: Colors.green,
-//   //           ),
-//   //         ),
-//   //         content: Text(
-//   //           'Your medicine has been successfully scheduled.',
-//   //           style: GoogleFonts.poppins(
-//   //             fontSize: 18,
-//   //             color: Colors.black,
-//   //           ),
-//   //         ),
-//   //         actions: [
-//   //           TextButton(
-//   //             onPressed: () {
-//   //               Navigator.pop(context); // Close the dialog
-//   //             },
-//   //             child: Text(
-//   //               'OK',
-//   //               style: GoogleFonts.poppins(
-//   //                 fontSize: 16,
-//   //                 color: kSecondColor,
-//   //               ),
-//   //             ),
-//   //           ),
-//   //         ],
-//   //       );
-//   //     },
-//   //   );
-//   // }
-//
+
 
 class IntervalSelection extends StatefulWidget {
   const IntervalSelection({Key? key}) : super(key: key);
@@ -416,6 +445,7 @@ class _IntervalSelectionState extends State<IntervalSelection> {
   @override
   Widget build(BuildContext context) {
     final NewEntryBloc newEntryBloc = Provider.of<NewEntryBloc>(context);
+
     return Padding(
       padding: const EdgeInsets.only(top: 1),
       child: Row(

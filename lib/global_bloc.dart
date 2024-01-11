@@ -2,6 +2,7 @@ import 'package:mreminderapp/models/medicine.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class GlobalBloc {
   BehaviorSubject<List<Medicine>>? _medicineList$;
@@ -13,11 +14,18 @@ class GlobalBloc {
   }
 
   Future removeMedicine(Medicine tobeRemoved) async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationPlugin = FlutterLocalNotificationPlugin();
     SharedPreferences sharedUser = await SharedPreferences.getInstance();
     List<String> medicineJsonList = [];
+
     var blockList = _medicineList$!.value;
     blockList.removeWhere(
   (medicine) => medicine.medicineName == tobeRemoved.medicineName);
+
+    //remove notification
+    for (int i = (0 < (24 / tobeRemoved.interval!).floor()) as int; i++;) {
+      flutterLocalNotificationPlugin.cancel(int.parse(tobeRemoved.notificationIDs![i]));
+    }
 
     if(blockList.isNotEmpty){
       for(var blockMedicine in blockList){
