@@ -121,7 +121,8 @@ class MainSection extends StatelessWidget {
         tag: medicine!.medicineName! + medicine!.medicineType!,
         child: SvgPicture.asset(
           'assets/icons/pill.svg',
-          height: 30,
+          height:50,
+          width: 50,
         ),
       );
     } else if (medicine != null && medicine!.medicineType == 'insulin') {
@@ -129,7 +130,8 @@ class MainSection extends StatelessWidget {
         tag: medicine!.medicineName! + medicine!.medicineType!,
         child: SvgPicture.asset(
           'assets/icons/insulin.svg',
-          height: 30,
+          height: 50,
+          width: 50,
         ),
       );
     }
@@ -146,10 +148,11 @@ class MainSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(mainAxisAlignment: MainAxisAlignment.center,
+      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        makeIcon(30),
-        SizedBox(width: 10),
+        makeIcon(50),
+        SizedBox(height: 10),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

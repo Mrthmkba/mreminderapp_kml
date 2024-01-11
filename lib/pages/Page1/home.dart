@@ -200,6 +200,7 @@ class MedicineCard extends StatelessWidget {
         child: SvgPicture.asset(
           'assets/icons/insulin.svg',
           height: 50,
+          width: 50,
         ),
       );
     }
