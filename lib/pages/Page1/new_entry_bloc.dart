@@ -5,62 +5,52 @@ import 'package:rxdart/rxdart.dart';
 import '../../models/errors.dart';
 
 class NewEntryBloc {
-  //
-  BehaviorSubject<MedicineType>? _selectedMedicineType;
+  BehaviorSubject<MedicineType>? _selectedMedicineTypeStream;
+  ValueStream<MedicineType>? get selectedMedicineType =>
+      _selectedMedicineTypeStream!.stream;
 
-  ValueStream<MedicineType>? get selectedMedicineType => _selectedMedicineType!.stream;
+  BehaviorSubject<int>? _selectedIntervalStream;
+  BehaviorSubject<int>? get selectedInterval => _selectedIntervalStream;
 
-  BehaviorSubject<int>? _selectedIntervals;
+  BehaviorSubject<String>? _selectedTimeOfDayStream;
+  BehaviorSubject<String>? get selectedTimeOfDay => _selectedTimeOfDayStream;
 
-  BehaviorSubject<int>? get selectedIntervals => selectedIntervals;
-
-  late BehaviorSubject<String>? selectedTimeOfDay;
-
-  BehaviorSubject<String>? get _selectTimeOfDay$ => selectedTimeOfDay;
-
-
-
-  //Error State
-  BehaviorSubject<EntryError>? _errorState$;
-
-  BehaviorSubject<EntryError>? get errorState$ => _errorState$;
-
+  BehaviorSubject<EntryError>? _errorStateStream;
+  BehaviorSubject<EntryError>? get errorState => _errorStateStream;
 
   NewEntryBloc() {
-
-    _selectedMedicineType =
+    _selectedMedicineTypeStream =
     BehaviorSubject<MedicineType>.seeded(MedicineType.none);
-    selectedTimeOfDay = BehaviorSubject<String>.seeded('none');
-    _selectedIntervals = BehaviorSubject<int>.seeded(0);
-    _errorState$ = BehaviorSubject<EntryError>();
+    _selectedTimeOfDayStream = BehaviorSubject<String>.seeded('none');
+    _selectedIntervalStream = BehaviorSubject<int>.seeded(0);
+    _errorStateStream = BehaviorSubject<EntryError>();
   }
 
   void dispose() {
-    _selectedMedicineType!.close();
-    selectedTimeOfDay!.close();
-    _selectedIntervals!.close();
+    _selectedMedicineTypeStream!.close();
+    _selectedTimeOfDayStream!.close();
+    _selectedIntervalStream!.close();
+    _errorStateStream!.close();
   }
 
-  void submiterror(EntryError error) {
-    _errorState$!.add(error);
+  void submitError(EntryError error) {
+    _errorStateStream!.add(error);
   }
 
   void updateInterval(int interval) {
-    _selectedIntervals!.add(interval);
+    _selectedIntervalStream!.add(interval);
   }
 
   void updateTime(String time) {
-    selectedTimeOfDay!.add(time);
+    _selectedTimeOfDayStream!.add(time);
   }
 
-
   void updateSelectedMedicine(MedicineType type) {
-    MedicineType _tempType = _selectedMedicineType!.value;
+    MedicineType _tempType = _selectedMedicineTypeStream!.value;
     if (type == _tempType) {
-      _selectedMedicineType!.add(MedicineType.none);
+      _selectedMedicineTypeStream!.add(MedicineType.none);
     } else {
-      _selectedMedicineType!.add(type);
+      _selectedMedicineTypeStream!.add(type);
     }
   }
 }
-

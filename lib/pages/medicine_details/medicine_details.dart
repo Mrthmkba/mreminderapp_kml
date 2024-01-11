@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mreminderapp/global_bloc.dart';
+import 'package:mreminderapp/models/medicine.dart';
+import 'package:provider/provider.dart';
 
 import '../Page1/constants.dart';
 
 class MedicineDetails extends StatefulWidget {
-  const MedicineDetails({super.key});
+  const MedicineDetails(this.medicine, {super.key});
+  final Medicine medicine;
 
   @override
   State<MedicineDetails> createState() => _MedicineDetailsState();
 }
 
 class _MedicineDetailsState extends State<MedicineDetails> {
+
   @override
   Widget build(BuildContext context) {
+    final GlobalBloc _globalBloc = Provider.of<GlobalBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -26,41 +32,42 @@ class _MedicineDetailsState extends State<MedicineDetails> {
         ),
         centerTitle: (true),
       ),
-      body: Column(
-        children: [
-          MainSection(),
-          SizedBox(
-            height: 10,
-          ),
-          ExtendedSection(),
-          Spacer(),
-          TextButton(
-            style: TextButton.styleFrom(
-                backgroundColor: kSecondColor,
-                shape: const StadiumBorder(),
-                padding: EdgeInsets.symmetric(horizontal: 45, vertical: 15)),
-            onPressed: () {
-              //open alert box
-              openAlertBox(context);
-            },
-            child: Text(
-              'Delete',
-              style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w900,
-                fontSize: 20,
-                color: Colors.black,
+      body: Padding(
+        padding:  EdgeInsets.only(top: 5),
+        child: Column(
+          children: [
+            MainSection(medicine: widget.medicine),
+            SizedBox(height: 10),
+            ExtendedSection(medicine: widget.medicine),
+            Spacer(),
+            TextButton(
+              style: TextButton.styleFrom(
+                  backgroundColor: kSecondColor,
+                  shape: const StadiumBorder(),
+                  padding: EdgeInsets.symmetric(horizontal: 45, vertical: 15)),
+              onPressed: () {
+                //open alert box
+                openAlertBox(context, _globalBloc);
+              },
+              child: Text(
+                'Delete',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 20,
+                  color: Colors.black,
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 8,
-          )
-        ],
+            SizedBox(
+              height: 8,
+            )
+          ],
+        ),
       ),
     );
   }
 
-  openAlertBox(BuildContext context) {
+  openAlertBox(BuildContext context,GlobalBloc _globalBloc) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -68,18 +75,15 @@ class _MedicineDetailsState extends State<MedicineDetails> {
           backgroundColor: kSecondColor,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topLeft:Radius.circular(20),
-            bottomRight: Radius.circular(20),
+              topLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
             ),
           ),
           contentPadding: EdgeInsets.only(top: 1),
-          title: Text(
-            'Delete This Reminder ?',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          title: Text('Delete This Reminder ?', style: TextStyle()),
           actions: [
             TextButton(
-              onPressed: (){
+              onPressed: () {
                 Navigator.of(context).pop();
               },
               child: Text(
@@ -88,46 +92,85 @@ class _MedicineDetailsState extends State<MedicineDetails> {
               ),
             ),
             TextButton(
-              onPressed: (){
+              onPressed: () {
                 //global bloc to delete Medicine
+                _globalBloc.removeMedicine(widget.medicine);
+                Navigator.popUntil(context, ModalRoute.withName('/'));
               },
               child: Text(
                 'OK',
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(color: kErrorColor),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall!
+                    .copyWith(color: kErrorColor),
               ),
             ),
           ],
-
         );
       },
     );
   }
 }
 
-class MainSection extends StatelessWidget {
-  const MainSection({super.key});
+class MainSection extends StatelessWidget  {
+  const MainSection({super.key, this.medicine});
+  final Medicine? medicine;
+
+  Hero makeIcon(double size) {
+    if (medicine!.medicineType == 'pill') {
+      return Hero(
+        tag: medicine!.medicineName! + medicine!.medicineType!,
+        child: SvgPicture.asset(
+          'assets/icons/pill.svg',
+          height: 7,
+        ),
+      );
+    } else if (medicine!.medicineType == 'insulin') {
+      return Hero(
+        tag: medicine!.medicineName! + medicine!.medicineType!,
+        child: SvgPicture.asset(
+          'assets/icons/insulin.svg',
+          height: 7,
+        ),
+      );
+    }
+    // for condition of no medicine type icon selected
+    return Hero(
+      tag: medicine!.medicineName! + medicine!.medicineType!,
+      child: Icon(
+        Icons.error,
+        color: kTexColor,
+        size: size,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
-
       children: [
-        Image.asset(
-          'assets/icons/pill.png',height: 5,width: 5,
-        ),
-        const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-
+        makeIcon(7),
+        SizedBox(width: 10),
+         Column(
+           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 10,),
-            MainInfoTab(
-              fieldTitle: 'Medicine Name',
-              fieldInfo: 'Pill',
+            Hero(
+              tag: medicine!.medicineName!,
+              child: Material(
+                color: Colors.transparent,
+                child: MainInfoTab(
+                    fieldTitle: 'Medicine Name',
+                    fieldInfo: medicine!.medicineName!),
+              ),
             ),
-            SizedBox(height: 8,),
+            SizedBox(
+              height: 8,
+            ),
             MainInfoTab(
-              fieldTitle: 'Dosage',
-              fieldInfo: '500 mg',
+                fieldTitle: 'Dosage',
+                fieldInfo: medicine!.dosage == 0
+                    ? 'Not Specified'
+                    : '${medicine!.dosage} mg'
             ),
           ],
         ),
@@ -146,21 +189,21 @@ class MainInfoTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          fieldTitle,
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
-        const SizedBox(
-          height: 0.5,
-        ),
-        Text(
-          fieldInfo,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-      ],
-    );
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              fieldTitle,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            const SizedBox(
+              height: 0.5,
+            ),
+            Text(
+              fieldInfo,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        );
   }
 }
 
@@ -197,24 +240,27 @@ class ExtendedInfoTab extends StatelessWidget {
 }
 
 class ExtendedSection extends StatelessWidget {
-  const ExtendedSection({super.key});
+  const ExtendedSection({super.key, this.medicine});
+  final Medicine? medicine;
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       shrinkWrap: true,
-      children: const [
+      children: [
         ExtendedInfoTab(
           fieldTitle: 'Medicine Type',
-          fieldInfo: 'Pill',
+          fieldInfo: medicine!.medicineType! == 'none'
+              ? 'Not Specified'
+              : medicine!.medicineType!,
         ),
         ExtendedInfoTab(
           fieldTitle: 'Dosage Interval',
-          fieldInfo: 'Every 8 Hours | 3 Times a day',
+          fieldInfo: 'Every ${medicine!.interval} Hours | ${medicine!.interval == 24 ? 'One time a day' : '${(24 / medicine!.interval!).floor()} times a day'}'
         ),
         ExtendedInfoTab(
           fieldTitle: 'Start Time',
-          fieldInfo: '01:40',
+          fieldInfo: '${medicine!.startTime![0]}${medicine!.startTime![1]}:${medicine!.startTime![2]}${medicine!.startTime![3]}',
         ),
       ],
     );

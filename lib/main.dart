@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mreminderapp/pages/Page1/new_entry_bloc.dart';
 import 'package:provider/provider.dart';
 import 'global_bloc.dart';
 import 'pages/Page1/constants.dart';
@@ -70,10 +71,12 @@ class _MyAppState extends State<MyApp> {
             color: kTexColor,
           ),
           bodyMedium: GoogleFonts.poppins(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: kOtherColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w900,
+            color: kTexColor,
           ),
+
+
 
           titleSmall: GoogleFonts.poppins(fontSize: 14, color: kTexColor,fontWeight: FontWeight.w400),
           titleMedium: GoogleFonts.poppins(fontSize: 16, color: kTexColor),
@@ -97,6 +100,21 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
+        // timePickerTheme: TimePickerThemeData(
+        //   backgroundColor: kOColor,
+        //   hourMinuteColor: kTexColor,
+        //   hourMinuteTextColor: ko,
+        //   dayPeriodColor: kTexColor,
+        //   dayPeriodTextColor: kOtherColor,
+        //   dialBackgroundColor: kTexColor,
+        //   dialHandColor: kPrimaryColor,
+        //   dialTextColor: kOtherColor,
+        //   entryModeIconColor: kOtherColor,
+        //   dayPeriodTextStyle: GoogleFonts.poppins(
+        //     fontSize: 10,
+        //   ),
+
+       // ),
       ),
       home: const HomePage(title:'Reminder'),
     ),

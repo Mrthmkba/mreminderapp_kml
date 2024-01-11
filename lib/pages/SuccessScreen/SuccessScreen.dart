@@ -13,7 +13,7 @@ class _SuccessPageState extends State<SuccessPage> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(milliseconds: 3000), () {
+    Timer(const Duration(milliseconds: 300), () {
       Navigator.popUntil(context, ModalRoute.withName('/'));
     });
   }

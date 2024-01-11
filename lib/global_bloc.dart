@@ -1,22 +1,35 @@
-
-
 import 'package:mreminderapp/models/medicine.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-class GlobalBloc{
+class GlobalBloc {
   BehaviorSubject<List<Medicine>>? _medicineList$;
   BehaviorSubject<List<Medicine>>? get medicineList$ => _medicineList$;
 
-  GlobalBloc(){
+  GlobalBloc() {
     _medicineList$ = BehaviorSubject<List<Medicine>>.seeded([]);
     makeMedicineList();
-
   }
 
-  Future UpdateMedicineList(Medicine newMedicine) async{
+  Future removeMedicine(Medicine tobeRemoved) async {
+    SharedPreferences sharedUser = await SharedPreferences.getInstance();
+    List<String> medicineJsonList = [];
+    var blockList = _medicineList$!.value;
+    blockList.removeWhere(
+  (medicine) => medicine.medicineName == tobeRemoved.medicineName);
+
+    if(blockList.isNotEmpty){
+      for(var blockMedicine in blockList){
+        String medicineJson = jsonEncode(blockMedicine.toJson());
+        medicineJsonList.add(medicineJson);
+  }
+  }
+    sharedUser.setStringList('medicine', medicineJsonList);
+    _medicineList$!.add(blockList);
+}
+
+  Future updateMedicineList(Medicine newMedicine) async {
     var blocList = _medicineList$!.value;
     blocList.add(newMedicine);
     _medicineList$!.add(blocList);
@@ -25,24 +38,26 @@ class GlobalBloc{
     SharedPreferences? sharedUser = await SharedPreferences.getInstance();
     String newMedicineJson = jsonEncode(tempMap);
     List<String> medicineJsonList = [];
-    if(sharedUser.getStringList('medicines') == null){
+    if (sharedUser.getStringList('medicines') == null) {
       medicineJsonList.add(newMedicineJson);
-    }else{
+    } else {
       medicineJsonList = sharedUser.getStringList('medicines')!;
       medicineJsonList.add(newMedicineJson);
     }
     sharedUser.setStringList('medicines', medicineJsonList);
   }
 
+
+
   Future makeMedicineList() async {
     SharedPreferences? sharedUser = await SharedPreferences.getInstance();
     List<String>? jsonList = sharedUser.getStringList('medicines');
-    List<Medicine> prefList= [];
+    List<Medicine> prefList = [];
 
-    if ( jsonList == null){
+    if (jsonList == null) {
       return;
-    }else {
-      for(String jsonMedicine in jsonList){
+    } else {
+      for (String jsonMedicine in jsonList) {
         dynamic userMap = jsonDecode(jsonMedicine);
         Medicine tempMedicine = Medicine.fromJson(userMap);
         prefList.add(tempMedicine);
@@ -53,9 +68,7 @@ class GlobalBloc{
     }
   }
 
-  void dispose(){
+  void dispose() {
     _medicineList$!.close();
   }
 }
-
-
