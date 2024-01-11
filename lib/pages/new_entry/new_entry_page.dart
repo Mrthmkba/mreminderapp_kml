@@ -350,24 +350,27 @@ class _NewEntryPageState extends State<NewEntryPage> {
       android : androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics
     );
-    for ( int i =0; i< (24/medicine.interval!).floor(); i++){
-      if(hour + (medicine.interval! * i) > 23){
-        hour = hour + (medicine.interval! * i) -24;
-      }else{
+    for (int i = 0; i < (24 / medicine.interval!).floor(); i++) {
+      if (hour + (medicine.interval! * i) > 23) {
+        hour = hour + (medicine.interval! * i) - 24;
+      } else {
         hour = hour + (medicine.interval! * i);
       }
-      await flutterLocalNotificationsPlugin.show(
+      await flutterLocalNotificationsPlugin.showDailyAtTime(
         int.parse(medicine.notificationIDs![i]),
         'Reminder: ${medicine.medicineName}',
-        medicine.medicineType.toString() != MedicineType.none.toString()
-           ?'It is time to take your ${medicine.medicineType!.toLowerCase()}, according to schedule'
-            :'It is time to take your medicine, according to schedule',
-          const TimeOfDay( hour: 0,minute: 0) as NotificationDetails?,
-          platformChannelSpecifics,
-          payload: 'Notification Payload'
+        medicine.medicineType.toString() !=
+            MedicineType.none.toString()
+            ? 'It is time to take your ${medicine.medicineType!
+            .toLowerCase()}, according to schedule'
+            : 'It is time to take your medicine, according to schedule',
+        Time(hour, minute), // Adjust this line accordingly if minute is needed
+        platformChannelSpecifics,
+        payload: 'Notification Payload',
       );
       hour = ogValue;
     }
+
   }
 }
 
