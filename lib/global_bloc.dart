@@ -14,7 +14,7 @@ class GlobalBloc {
   }
 
   Future removeMedicine(Medicine tobeRemoved) async {
-    FlutterLocalNotificationsPlugin flutterLocalNotificationPlugin = FlutterLocalNotificationPlugin();
+    FlutterLocalNotificationsPlugin flutterLocalNotificationPlugin = FlutterLocalNotificationsPlugin();
     SharedPreferences sharedUser = await SharedPreferences.getInstance();
     List<String> medicineJsonList = [];
 
@@ -23,7 +23,7 @@ class GlobalBloc {
   (medicine) => medicine.medicineName == tobeRemoved.medicineName);
 
     //remove notification
-    for (int i = (0 < (24 / tobeRemoved.interval!).floor()) as int; i++;) {
+    for (int i = 0; i < (24 / tobeRemoved.interval!).floor(); i++) {
       flutterLocalNotificationPlugin.cancel(int.parse(tobeRemoved.notificationIDs![i]));
     }
 

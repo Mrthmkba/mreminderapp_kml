@@ -117,6 +117,7 @@ class _MyAppState extends State<MyApp> {
        // ),
       ),
       home: const HomePage(title:'Reminder'),
+        debugShowCheckedModeBanner: false,
     ),
     );
   }

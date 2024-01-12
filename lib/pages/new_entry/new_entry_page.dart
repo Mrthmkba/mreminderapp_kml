@@ -1,5 +1,6 @@
 // TODO Implement this library.
 import 'dart:math';
+import 'dart:core';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +13,11 @@ import 'package:provider/provider.dart';
 import 'package:mreminderapp/models/medicine_type.dart';
 import 'package:mreminderapp/pages/Page1/constants.dart';
 import 'package:mreminderapp/pages/Page1/new_entry_bloc.dart';
-//import 'package:flutter/time_picker.dart';
+// import 'package:flutter/time_picker.dart';
 import 'package:mreminderapp/pages/SuccessScreen/SuccessScreen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 
 class NewEntryPage extends StatefulWidget {
   const NewEntryPage(
@@ -174,9 +177,9 @@ class _NewEntryPageState extends State<NewEntryPage> {
                         child: Text(
                           'Save',
                           style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    color: kTexColor,
-                                  ),
+                          Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: kTexColor,
+                          ),
                         ),
                       ),
                       onPressed: () {
@@ -224,9 +227,9 @@ class _NewEntryPageState extends State<NewEntryPage> {
                             _newEntryBloc.selectedTimeOfDay!.value;
 
                         List<int> intIDs =
-                            makeIDs(24 / _newEntryBloc.selectedInterval!.value);
+                        makeIDs(24 / _newEntryBloc.selectedInterval!.value);
                         List<String> notificationIDs =
-                            intIDs.map((i) => i.toString()).toList();
+                        intIDs.map((i) => i.toString()).toList();
 
                         Medicine newEntryMedicine = Medicine(
                             notificationIDs: notificationIDs,
@@ -266,27 +269,27 @@ class _NewEntryPageState extends State<NewEntryPage> {
           break;
 
         case EntryError.nameDuplicate:
-          //  Handle this case.
+        //  Handle this case.
           displayError("This medicine been already scheduled");
           break;
 
         case EntryError.dosage:
-          //  Handle this case.
+        //  Handle this case.
           displayError("Please fill in the required dosage");
           break;
 
         case EntryError.type:
-          // Handle this case.
+        // Handle this case.
           displayError("Please choose medicine type ");
           break;
 
         case EntryError.interval:
-          //  Handle this case.
+        //  Handle this case.
           displayError("Please select the medicine interval");
           break;
 
         case EntryError.startTime:
-          //  Handle this case.
+        //  Handle this case.
           displayError("Please select the starting time for schedule");
           break;
         default:
@@ -510,10 +513,10 @@ class _IntervalSelectionState extends State<IntervalSelection> {
 class MedicineTypeColumn extends StatelessWidget {
   const MedicineTypeColumn(
       {Key? key,
-      required this.medicineType,
-      required this.name,
-      required this.iconValue,
-      required this.isSelected})
+        required this.medicineType,
+        required this.name,
+        required this.iconValue,
+        required this.isSelected})
       : super(key: key);
 
   final MedicineType medicineType;
@@ -562,12 +565,12 @@ class MedicineTypeColumn extends StatelessWidget {
               ),
               child: Center(
                   child: Text(
-                name,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
-                    .copyWith(color: isSelected ? Colors.purple : kTexColor),
-              )),
+                    name,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(color: isSelected ? Colors.purple : kTexColor),
+                  )),
             ),
           ),
         ],
