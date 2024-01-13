@@ -316,8 +316,8 @@ class _NewEntryPageState extends State<NewEntryPage> {
   }
 
   initializeNotifications() async {
-    var initializationSettingsAndroid =
-        const AndroidInitializationSettings("@mipmap/launcher_icon");
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
 
     var initializationSettingsIOS = const DarwinInitializationSettings();
     var initializationSettings = InitializationSettings(
