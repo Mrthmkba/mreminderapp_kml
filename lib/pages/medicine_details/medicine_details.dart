@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mreminderapp/global_bloc.dart';
-import 'package:mreminderapp/models/medicine.dart';
+import '../../global_bloc.dart';
+import '../../models/medicine.dart';
 import 'package:provider/provider.dart';
-
 import '../Page1/constants.dart';
 
 class MedicineDetails extends StatefulWidget {
@@ -215,7 +214,7 @@ class ExtendedInfoTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

@@ -1,21 +1,31 @@
-// TODO Implement this library.
 import 'dart:math';
 import 'dart:core';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
-import 'package:mreminderapp/common/convert_time.dart';
-import 'package:mreminderapp/global_bloc.dart';
-import 'package:mreminderapp/models/errors.dart';
-import 'package:mreminderapp/models/medicine.dart';
-import 'package:mreminderapp/pages/Page1/home.dart';
+import 'package:mreminderapp/Reminder/common/convert_time.dart';
+import 'package:mreminderapp/Reminder/global_bloc.dart';
+import 'package:mreminderapp/Reminder/models/errors.dart';
+import 'package:mreminderapp/Reminder/models/medicine.dart';
+import 'package:mreminderapp/Reminder/pages/Page1/home.dart';
 import 'package:provider/provider.dart';
-import 'package:mreminderapp/models/medicine_type.dart';
-import 'package:mreminderapp/pages/Page1/constants.dart';
-import 'package:mreminderapp/pages/Page1/new_entry_bloc.dart';
+import 'package:mreminderapp/Reminder/models/medicine_type.dart';
+import 'package:mreminderapp/Reminder/pages/Page1/constants.dart';
+import 'package:mreminderapp/Reminder/pages/Page1/new_entry_bloc.dart';
 // import 'package:flutter/time_picker.dart';
-import 'package:mreminderapp/pages/SuccessScreen/SuccessScreen.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:mreminderapp/Reminder/pages/SuccessScreen/SuccessScreen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import '../../common/convert_time.dart';
+import '../../global_bloc.dart';
+import '../../models/errors.dart';
+import '../../models/medicine.dart';
+import '../../models/medicine_type.dart';
+import '../Page1/constants.dart';
+import '../Page1/home.dart';
+import '../Page1/new_entry_bloc.dart';
+import '../SuccessScreen/SuccessScreen.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 
@@ -90,17 +100,21 @@ class _NewEntryPageState extends State<NewEntryPage> {
                 isRequired: true,
               ),
               SizedBox(height: 2),
-              TextFormField(
+              TextField(
                 maxLength: 15,
                 controller: nameController,
                 style: const TextStyle(
                   color: Colors.black,
                 ),
                 textCapitalization: TextCapitalization.words,
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                   filled: true,
-                  fillColor: kOtherColor,
+                  fillColor: kSecondColor,
+                  // decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(17),
+                  //     color: isSelected ? kOtherColor : kSecondColor),
                   border: UnderlineInputBorder(
+                    borderRadius: BorderRadius.circular(40),
                     borderSide: BorderSide.none,
                   ),
                 ),
@@ -110,14 +124,14 @@ class _NewEntryPageState extends State<NewEntryPage> {
                 title: 'Dosage in (mg)',
                 isRequired: false,
               ),
-              TextFormField(
+              TextField(
                 controller: dosageController,
                 maxLength: 5,
                 keyboardType: TextInputType.number,
                 textCapitalization: TextCapitalization.words,
                 decoration: const InputDecoration(
                   filled: true,
-                  fillColor: kOtherColor,
+                  fillColor: kSecondColor,
                   border: UnderlineInputBorder(),
                 ),
               ),
@@ -159,23 +173,22 @@ class _NewEntryPageState extends State<NewEntryPage> {
               const PanelTitle(title: ' Starting Time', isRequired: true),
               const SelectTime(),
               const SizedBox(
-                height: 4,
+                height: 60,
               ),
               Center(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8),
                   child: SizedBox(
-                    height: 30,
-                    width: 180,
+                    height: 50,
+                    width: 300,
                     child: TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: kSecondColor,
-                          shape: const StadiumBorder(),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 45, vertical: 15)),
+                        backgroundColor: kSecondColor,
+                        shape: const StadiumBorder(),
+                      ),
                       child: Center(
                         child: Text(
-                          'Save',
+                          'Add',
                           style:
                           Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: kTexColor,
@@ -220,9 +233,10 @@ class _NewEntryPageState extends State<NewEntryPage> {
                         String medicineType = _newEntryBloc
                             .selectedMedicineType!.value
                             .toString()
-                            .substring(10);
+                            .substring(13);
 
                         int interval = _newEntryBloc.selectedInterval!.value;
+
                         String startTime =
                             _newEntryBloc.selectedTimeOfDay!.value;
 
@@ -315,13 +329,21 @@ class _NewEntryPageState extends State<NewEntryPage> {
     return ids;
   }
 
+  Future<void> requestNotificationPermission() async {
+    var status = await Permission.notification.status;
+
+    if (status.isDenied) {
+      await Permission.notification.request();
+    }
+  }
+
   initializeNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
     AndroidInitializationSettings('@mipmap/ic_launcher');
 
     var initializationSettingsIOS = const DarwinInitializationSettings();
     var initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
@@ -340,18 +362,18 @@ class _NewEntryPageState extends State<NewEntryPage> {
 
     var androidPlatformChannelSpecifics =
     const AndroidNotificationDetails(
-      'repeatDailyAtTime channel id','repeatDailyAtTime channel name',
-      importance : Importance.max,
-      ledColor: kSecondColor,
-      ledOffMs: 1000,
-      ledOnMs: 1000,
-      enableLights: true);
+        'repeatDailyAtTime channel id','repeatDailyAtTime channel name',
+        importance : Importance.max,
+        ledColor: kSecondColor,
+        ledOffMs: 1000,
+        ledOnMs: 1000,
+        enableLights: true);
 
     var iOSPlatformChannelSpecifics = const DarwinNotificationDetails();
 
     var platformChannelSpecifics = NotificationDetails(
-      android : androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics
+        android : androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics
     );
     for (int i = 0; i < (24 / medicine.interval!).floor(); i++) {
       if (hour + (medicine.interval! * i) > 23) {
@@ -467,8 +489,9 @@ class _IntervalSelectionState extends State<IntervalSelection> {
             ),
           ),
           DropdownButton(
+            focusColor: kTextLightColor,
             iconEnabledColor: kScaffoldColor,
-            dropdownColor: kSecondColor,
+            dropdownColor: kTextLightColor,
             hint: _selected == 0
                 ? const Text(
               'Select Interval',
@@ -487,7 +510,7 @@ class _IntervalSelectionState extends State<IntervalSelection> {
                 value: value,
                 child: Text(
                   value.toString(),
-                  style: Theme.of(context).textTheme.titleSmall,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               );
             }).toList(),
@@ -537,8 +560,8 @@ class MedicineTypeColumn extends StatelessWidget {
             height: 100,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(3),
-                color: isSelected ? kOtherColor : kSecondColor),
+                borderRadius: BorderRadius.circular(17),
+                color: isSelected ? kTexColor : kSecondColor),
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -560,7 +583,7 @@ class MedicineTypeColumn extends StatelessWidget {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: isSelected ? kOtherColor : Colors.transparent,
+                color: isSelected ? kTexColor : Colors.transparent,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Center(
@@ -568,8 +591,8 @@ class MedicineTypeColumn extends StatelessWidget {
                     name,
                     style: Theme.of(context)
                         .textTheme
-                        .titleSmall!
-                        .copyWith(color: isSelected ? Colors.purple : kTexColor),
+                        .labelLarge!
+                        .copyWith(color: isSelected ? kSecondColor : kTexColor),
                   )),
             ),
           ),

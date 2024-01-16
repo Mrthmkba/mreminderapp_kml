@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mreminderapp/global_bloc.dart';
-import 'package:mreminderapp/models/medicine.dart';
-import 'package:mreminderapp/pages/Page1/constants.dart';
-import 'package:mreminderapp/pages/medicine_details/medicine_details.dart';
-import 'package:mreminderapp/pages/new_entry/new_entry_page.dart';
+import 'package:mreminderapp/Reminder/global_bloc.dart';
+import 'package:mreminderapp/Reminder/models/medicine.dart';
+import 'package:mreminderapp/Reminder/pages/Page1/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mreminderapp/models/medicine.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../global_bloc.dart';
+import '../medicine_details/medicine_details.dart';
+import '../new_entry/new_entry_page.dart';
+import 'constants.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key, required String title}) : super(key: key);
@@ -42,13 +46,26 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: InkResponse(
-        onTap: () {
-          //going to new page
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  const NewEntryPage(title: 'Add New ', isRequired: true),
+        onTap: () async {
+          // Call requestNotificationPermission when the button is pressed
+          await requestNotificationPermission();
+
+          // Going to new page
+          Navigator.of(context).push(
+            PageRouteBuilder<void>(
+              pageBuilder: (BuildContext context, Animation<double> animation,
+                  Animation<double> secondaryAnimation) {
+                return AnimatedBuilder(
+                  animation: animation,
+                  builder: (context, Widget? child) {
+                    return Opacity(
+                      opacity: animation.value,
+                      child: NewEntryPage(title: 'Add New', isRequired: true,),
+                    );
+                  },
+                );
+              },
+              transitionDuration: const Duration(milliseconds: 600),
             ),
           );
         },
@@ -63,6 +80,14 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Future<void> requestNotificationPermission() async {
+  var status = await Permission.notification.status;
+
+  if (status.isDenied) {
+    await Permission.notification.request();
   }
 }
 
@@ -116,10 +141,6 @@ class TopContainer extends StatelessWidget {
             return Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.only(bottom: 1),
-              child: Text(
-                !snapshot.hasData ? '0' : snapshot.data!.length.toString(),
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
             );
           },
         ),
@@ -133,8 +154,6 @@ class BottomContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalBloc globalBloc = Provider.of<GlobalBloc>(context);
-
-
     return StreamBuilder(
       stream: globalBloc.medicineList$,
       builder: (context, snapshot) {
@@ -152,14 +171,13 @@ class BottomContainer extends StatelessWidget {
             ),
           );
         } else {
-          return GridView.builder(
+          return ListView.builder(
             padding: EdgeInsets.only(top: 1),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3),
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               return MedicineCard(
-                  medicine: snapshot.data![index]);
+                medicine: snapshot.data![index],
+              );
             },
           );
         }
@@ -229,39 +247,45 @@ class MedicineCard extends StatelessWidget {
         );
       },
       child: Container(
-        padding: EdgeInsets.only(left: 2, right: 2, top: 1, bottom: 1),
-        margin: EdgeInsets.all(1),
+        height: 80, // Set a consistent height for each card
+        padding: EdgeInsets.all(8), // Add padding for spacing
+        margin: EdgeInsets.all(8), // Add margin for spacing
         decoration: BoxDecoration(
           color: kSecondColor,
-          borderRadius: BorderRadius.circular(2),
+          borderRadius: BorderRadius.circular(8),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Spacer(),
             makeIcon(50),
-            const Spacer(),
-            // Tag animation
-            Hero(
-              tag: medicine.medicineName!,
-              child: Text(
-                medicine.medicineName ?? '',
-                overflow: TextOverflow.fade,
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.titleLarge,
+            SizedBox(width: 16), // Adjust spacing between icon and text
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Hero(
+                    tag: medicine.medicineName!,
+                    child: Text(
+                      medicine.medicineName ?? '',
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  SizedBox(height: 0.3),
+                  Text(
+                    medicine.interval != null
+                        ? (medicine.interval == 1
+                        ? 'Every ${medicine.interval} hour'
+                        : 'Every ${medicine.interval} hours')
+                        : 'Interval not specified',
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ],
               ),
-            ),
-            SizedBox(height: 0.3),
-            Text(
-              medicine.interval != null
-                  ? (medicine.interval == 1
-                  ? 'Every ${medicine.interval} hour'
-                  : 'Every ${medicine.interval} hours')
-                  : 'Interval not specified',
-              overflow: TextOverflow.fade,
-              textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.titleSmall,
             ),
           ],
         ),
@@ -269,4 +293,3 @@ class MedicineCard extends StatelessWidget {
     );
   }
 }
-

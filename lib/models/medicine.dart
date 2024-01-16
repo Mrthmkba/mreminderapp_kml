@@ -33,7 +33,7 @@ class Medicine {
       'name': medicineName,
       'dosage': dosage,
       'type': medicineType,
-      'interval;': interval,
+      'interval': interval,
       'start': startTime,
     };
   }

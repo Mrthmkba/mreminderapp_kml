@@ -100,20 +100,20 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
-        // timePickerTheme: TimePickerThemeData(
-        //   backgroundColor: kOColor,
-        //   hourMinuteColor: kTexColor,
-        //   hourMinuteTextColor: ko,
-        //   dayPeriodColor: kTexColor,
-        //   dayPeriodTextColor: kOtherColor,
-        //   dialBackgroundColor: kTexColor,
-        //   dialHandColor: kPrimaryColor,
-        //   dialTextColor: kOtherColor,
-        //   entryModeIconColor: kOtherColor,
-        //   dayPeriodTextStyle: GoogleFonts.poppins(
-        //     fontSize: 10,
-        //   ),
-
+       //  timePickerTheme: TimePickerThemeData(
+       //    backgroundColor: kSecondColor,
+       //    hourMinuteColor: kTexColor,
+       //    hourMinuteTextColor: kTexColor,
+       //    dayPeriodColor: kSecondColor,
+       //    dayPeriodTextColor: kTexColor,
+       //    dialBackgroundColor: kSecondColor,
+       //    dialHandColor: kSecondColor,
+       //    dialTextColor: kTexColor,
+       //    entryModeIconColor: kOtherColor,
+       //    dayPeriodTextStyle: GoogleFonts.poppins(
+       //      fontSize: 10,
+       //    ),
+       //
        // ),
       ),
       home: const HomePage(title:'Reminder'),
