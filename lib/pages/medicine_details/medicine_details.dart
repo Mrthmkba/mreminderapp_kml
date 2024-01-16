@@ -122,6 +122,7 @@ class MainSection extends StatelessWidget {
           'assets/icons/pill.svg',
           height:50,
           width: 50,
+          color: kPurple,
         ),
       );
     } else if (medicine != null && medicine!.medicineType == 'insulin') {
@@ -131,6 +132,7 @@ class MainSection extends StatelessWidget {
           'assets/icons/insulin.svg',
           height: 50,
           width: 50,
+          color: kPurple,
         ),
       );
     }
@@ -139,7 +141,7 @@ class MainSection extends StatelessWidget {
       tag: medicine != null ? medicine!.medicineName! + medicine!.medicineType! : '',
       child: Icon(
         Icons.error,
-        color: kTexColor,
+        color: kErrorColor,
         size: size,
       ),
     );

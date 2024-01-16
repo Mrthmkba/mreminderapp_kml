@@ -3,20 +3,9 @@ import 'dart:core';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
-import 'package:mreminderapp/Reminder/common/convert_time.dart';
-import 'package:mreminderapp/Reminder/global_bloc.dart';
-import 'package:mreminderapp/Reminder/models/errors.dart';
-import 'package:mreminderapp/Reminder/models/medicine.dart';
-import 'package:mreminderapp/Reminder/pages/Page1/home.dart';
 import 'package:provider/provider.dart';
-import 'package:mreminderapp/Reminder/models/medicine_type.dart';
-import 'package:mreminderapp/Reminder/pages/Page1/constants.dart';
-import 'package:mreminderapp/Reminder/pages/Page1/new_entry_bloc.dart';
-// import 'package:flutter/time_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:mreminderapp/Reminder/pages/SuccessScreen/SuccessScreen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import '../../common/convert_time.dart';
 import '../../global_bloc.dart';
 import '../../models/errors.dart';
@@ -26,7 +15,6 @@ import '../Page1/constants.dart';
 import '../Page1/home.dart';
 import '../Page1/new_entry_bloc.dart';
 import '../SuccessScreen/SuccessScreen.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 
 class NewEntryPage extends StatefulWidget {

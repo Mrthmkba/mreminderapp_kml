@@ -46,6 +46,7 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: InkResponse(
+
         onTap: () async {
           // Call requestNotificationPermission when the button is pressed
           await requestNotificationPermission();
@@ -69,14 +70,10 @@ class HomePage extends StatelessWidget {
             ),
           );
         },
-        child: const Card(
+        child: const Icon(
+          Icons.alarm_add,
           color: kPurple,
-          shape: CircleBorder(),
-          child: Icon(
-            Icons.add_outlined,
-            color: Colors.white,
-            size: 50,
-          ),
+          size: 65,
         ),
       ),
     );
